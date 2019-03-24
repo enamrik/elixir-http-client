@@ -20,7 +20,7 @@ defmodule ElixirHttpClient.HttpClient do
   @spec put(
     __MODULE__.t,
     String.t,
-    binary(),
+    any(),
     [{:timeout, integer}, {:recv_timeout, integer}, {:headers, map}]
     ) :: {:error, HttpStatusError} | {:ok, HttpResponse.t}
   def put(%__MODULE__{} = client, url, body, opts \\ []), do: client |> request(:put, url, body, opts)
@@ -28,7 +28,7 @@ defmodule ElixirHttpClient.HttpClient do
   @spec post(
     __MODULE__.t,
     String.t,
-    binary(),
+    any(),
     [{:timeout, integer}, {:recv_timeout, integer}, {:headers, map}]
     ) :: {:error, HttpStatusError} | {:ok, HttpResponse.t}
   def post(%__MODULE__{} = client, url, body, opts \\ []), do: client |> request(:post, url, body, opts)
@@ -36,7 +36,7 @@ defmodule ElixirHttpClient.HttpClient do
   @spec patch(
     __MODULE__.t,
     String.t,
-    binary(),
+    any(),
     [{:timeout, integer}, {:recv_timeout, integer}, {:headers, map}]
     ) :: {:error, HttpStatusError} | {:ok, HttpResponse.t}
   def patch(%__MODULE__{} = client, url, body, opts \\ []),  do: client |> request(:patch, url, body, opts)
@@ -44,7 +44,7 @@ defmodule ElixirHttpClient.HttpClient do
   @spec delete(
     __MODULE__.t,
     String.t,
-    binary(),
+    any,
     [{:timeout, integer}, {:recv_timeout, integer}, {:headers, map}]
     ) :: {:error, HttpStatusError} | {:ok, HttpResponse.t}
   def delete(%__MODULE__{} = client, url, body, opts \\ []), do: client |> request(:delete, url, body, opts)
@@ -53,7 +53,7 @@ defmodule ElixirHttpClient.HttpClient do
           __MODULE__.t,
           :delete | :get | :head | :options | :patch | :post | :put,
           String.t,
-          binary(),
+          any,
          [{:timeout, integer}, {:recv_timeout, integer}, {:headers, map}]
         ) :: {:error, HttpStatusError} | {:ok, HttpResponse.t}
   def request(%__MODULE__{} = client, method, url, body \\ "", opts \\ []) do
@@ -69,10 +69,10 @@ defmodule ElixirHttpClient.HttpClient do
     :delete | :get | :head | :options | :patch | :post | :put,
     String.t,
     map,
-    binary,
+    any,
     [{:timeout, integer}, {:recv_timeout, integer}, {:headers, map}]
     ) :: {:ok, HttpResponse.t} | {:error, HttpStatusError.t}
-  defp make_request(%__MODULE__{}, method, url, headers, body, options) do
+  def make_request(%__MODULE__{}, method, url, headers, body, options) do
     Logger.info("HttpClient:#{method} #{url}")
 
     case HTTPoison.request(method, url, body, headers, options) do
